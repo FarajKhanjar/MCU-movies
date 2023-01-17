@@ -8,7 +8,9 @@ const router = express.Router();
 // Get all movies
 router.route('/').get(async (req, res) => {
 try {
-    const movies = await moviesBLL.getAllMovies();
+    const filters = req.query;
+    console.log(filters);
+    const movies = await moviesBLL.getAllMovies(filters);
     res.json(movies);
 } catch (error) {
   res.json(error);

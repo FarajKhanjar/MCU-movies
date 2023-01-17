@@ -1,8 +1,8 @@
 const Movie = require('../models/movieModel');
 
 // GET - Get All - Read
-const getAllMovies = () => {
-  return Movie.find({});
+const getAllMovies = (filters) => {
+  return Movie.find(filters);
 };
 
 // GET - Get By Id - read
