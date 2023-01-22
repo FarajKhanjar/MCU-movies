@@ -1,20 +1,33 @@
 const express = require('express');
 const moviesBLL = require('../BLL/moviesBLL');
+const jwt = require('jsonwebtoken');
 
 const router = express.Router();
 
-// Entry Point 'http://localhost:8000/movies'
+// Entry Point 'http://localhost:8080/movies'
 
 // Get all movies
 router.route('/').get(async (req, res) => {
-try {
-    const filters = req.query;
-    console.log(filters);
-    const movies = await moviesBLL.getAllMovies(filters);
-    res.json(movies);
-} catch (error) {
-  res.json(error);
-}
+  const token = req.headers['x-access-token']; //x-access-token: accessToken
+  
+  if(!token) {
+    res.status(401).json('No token provided');
+  }
+
+  const ACCESS_SECRET_TOKEN = 'someKey';
+  
+  jwt.verify(token, ACCESS_SECRET_TOKEN, async (err, data) => {
+    if(err) {
+      res.status(500).json('Failed to authenticate token')
+    }
+
+    
+  const filters = req.query;
+  console.log(filters);
+  const movies = await moviesBLL.getAllMovies(filters);
+  res.json(movies);
+
+  });
 
 });
 
